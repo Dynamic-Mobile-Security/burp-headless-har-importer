@@ -9,6 +9,13 @@ java -Xmx1G -Djava.awt.headless=true -classpath burpsuite_pro.jar burp.StartBurp
 "extender":{
   "extensions":[
   {//пример плагина, установленного вручную
+  
+`
+
+`
+"extender":{
+  "extensions":[
+  {//пример плагина, установленного вручную
   "errors":"ui",
   "extension_file":"/home/kali/.BurpSuite/bapps/HarSiteMapCli.jar",
   "extension_type":"java",
