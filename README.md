@@ -2,9 +2,9 @@ HAR-plugin-for-Burp-CLI
 это плагин для Burp работающий в headless режиме.
 
 ## Запускаться он будет из командной строки примерно так:
-java -Xmx1G -Djava.awt.headless=true -classpath burpsuite_pro.jar burp.StartBurp --project-file=project.burp --user-config-file=<user-config-filename.json>
+`java -Xmx1G -Djava.awt.headless=true -classpath headless-burp-scanner-master-SNAPSHOT-jar-with-dependencies.jar:burpsuite_pro_v2021.9.1.jar burp.StartBurp --project-file=project.burp --user-config-file=burp-config-file.json`
 
-пример файла <user-config-filename.json>
+пример части файла <user-config-filename.json>
 
 `
 "extender":{
@@ -20,4 +20,7 @@ java -Xmx1G -Djava.awt.headless=true -classpath burpsuite_pro.jar burp.StartBurp
 }
 `
 ## Сборка плагина
-todo
+gradle -v
+Gradle 6.4.1
+
+gradle buildFatJar
