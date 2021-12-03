@@ -43,6 +43,9 @@ import org.json.simple.parser.JSONParser;
 
 
 public class RAYImport {
+    public static final String CONFIG_FILE_NAME = "har_files_to_import.json";
+    public static final String CONFIG_FILE_ARRAY_NAMES_KEY = "harfiles";
+    public static final String CONFIG_FILE_PATH_KEY = "path";
     static private String hostName = "";
     static private String delimeter = "\r\n";
     static private String space = " ";
@@ -51,13 +54,13 @@ public class RAYImport {
         List<String> fileNames = new ArrayList<String>();
         JSONParser parser = new JSONParser();
 		try {
-			Object obj = parser.parse(new FileReader("har_files_to_import.json"));
+			Object obj = parser.parse(new FileReader(CONFIG_FILE_NAME));
             JSONObject jsonObject = (JSONObject) obj;
-			JSONArray fileList = (JSONArray) jsonObject.get("harfiles");
+			JSONArray fileList = (JSONArray) jsonObject.get(CONFIG_FILE_ARRAY_NAMES_KEY);
  
 			Iterator<JSONObject> iterator = fileList.iterator();
 			while (iterator.hasNext()) {
-                String fileName = (String) iterator.next().get("path");
+                String fileName = (String) iterator.next().get(CONFIG_FILE_PATH_KEY);
                 fileNames.add(fileName);
 			}
         } catch (Exception e) {

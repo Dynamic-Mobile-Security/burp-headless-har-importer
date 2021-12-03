@@ -21,13 +21,10 @@ public class HarClientPanel implements IBurpExtender {
     // Requirement
     private static final long serialVersionUID = 7415151000560298154L;
 
-    // private final burp.IBurpExtenderCallbacks callbacks;
-    // private final burp.IExtensionHelpers helpers;
     private final boolean checkFakeParam = true;
     private final String paramname = "stingrayParamToExclude";
 
 	private PrintWriter stdout;
-    //private RAYImport rayimport;
 		
 	@Override
 	public void registerExtenderCallbacks(final IBurpExtenderCallbacks callbacks)
