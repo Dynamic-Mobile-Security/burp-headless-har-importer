@@ -1,26 +1,15 @@
 package sting;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URISyntaxException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
 
 import burp.IBurpExtender;
 import burp.IBurpExtenderCallbacks;
-import burp.IContextMenuInvocation;
 import burp.IHttpRequestResponse;
 import burp.IParameter;
 
-import sting.imports.RAYImport;
 import sting.imports.RAYRequestResponse;
 
 public class HarClientPanel implements IBurpExtender {
@@ -98,22 +87,8 @@ public class HarClientPanel implements IBurpExtender {
         
         // set our extension name
         callbacks.setExtensionName(HarClientPanel.name);
-        
-        // register context menu
-        //callbacks.registerContextMenuFactory(new ContextMenu(helpers, stdout));
 
-        // todo
-        try (FileOutputStream fileOut = new FileOutputStream(new File("file_log_extension.log"), true)) {
-        	PrintWriter writer = new PrintWriter(fileOut);
-			String timeStamp = new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime());
-			writer.println("Extenstion loaded: " + timeStamp);
-			writer.close();	
-		} catch (IOException e) {
-		    //handle exception
-		}
-
-        // TODO --- 
-        //this.rayimport = new RAYImport();
+        // Load requests from HAR files [1-*]
         ArrayList<IHttpRequestResponse> rs = sting.imports.RAYImport.loadHAR(checkFakeParam);
         sendToSitemap(rs);
 

@@ -6,6 +6,7 @@ repositories {
 
 dependencies {
     compile 'net.portswigger.burp.extender:burp-extender-api:2.1'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
     compile 'de.sstoehr:har-reader:2.2.0'
 }
 

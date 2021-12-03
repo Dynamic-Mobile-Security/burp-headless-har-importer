@@ -14,8 +14,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
-import javax.swing.JFileChooser;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -33,35 +31,40 @@ import sting.HarClientPanel;
 
 import java.util.List;
 import java.io.File;
-import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.Writer;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 
 public class RAYImport {
     static private String hostName = "";
     static private String delimeter = "\r\n";
     static private String space = " ";
-    static private boolean isDebug = false;
 
-    public static String getLoadFile() {
-        // TODO
-        // read the file from the CLI.argument (NOT FOUND THE INFO)  or from hardcoded_property.file  or  ENV.argument
-        System.err.println("ERROR: The HAR file cannot be readed...  Implement the method RAYImport.getLoadFile()");
-        throw new RuntimeException("The HAR file cannot be readed...  Implement the method RAYImport.getLoadFile()");
+    public static List<String> getLoadFile() {
+        List<String> fileNames = new ArrayList<String>();
+        JSONParser parser = new JSONParser();
+		try {
+			Object obj = parser.parse(new FileReader("har_files_to_import.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+			JSONArray fileList = (JSONArray) jsonObject.get("harfiles");
+ 
+			Iterator<JSONObject> iterator = fileList.iterator();
+			while (iterator.hasNext()) {
+                String fileName = (String) iterator.next().get("path");
+                fileNames.add(fileName);
+			}
+        } catch (Exception e) {
+		    //handle exception
+		}
 
-        // JFileChooser chooser = null;
-        // chooser = new JFileChooser();
-        // chooser.setDialogTitle("Import File");
-        // int val = chooser.showOpenDialog(null);
-
-        // if (val == JFileChooser.APPROVE_OPTION) {
-        //     return chooser.getSelectedFile().getAbsolutePath();
-        // }
-        //return "";
+        return fileNames;
     }
 
     public static ArrayList<String> readFile(String filename) {
@@ -96,45 +99,46 @@ public class RAYImport {
         ArrayList<IHttpRequestResponse> requests = new ArrayList<IHttpRequestResponse>();
         IExtensionHelpers helpers = HarClientPanel.callbacks.getHelpers();
         
-        String filename = getLoadFile();
-        if ( filename.length() == 0 ) { // exit if no file selected
-            writeLogFile("[ERROR] could not open file: " + filename);
-            return new ArrayList<IHttpRequestResponse>();
-        }
-
+        List<String> fileNames = getLoadFile();
         HarReader harReader = new HarReader();
         Iterator<HarEntry> items = null;
-        try {
-            Har har = harReader.readFromFile(new File(filename), HarReaderMode.LAX);
-            items = har.getLog().getEntries().iterator();
-        } catch (HarReaderException e) {
-            writeLogFile("[ERROR] to read HAR from from file: " + filename);
-            String stackTrace = e.getStackTrace().toString();
-            writeLogFile("[ERROR] exception: " + e.toString() + " stackTrace: " + stackTrace);
-            new ArrayList<IHttpRequestResponse>();
-        }
-
-        while (items.hasNext()) {
+        System.out.println("[INFO] Requests will be parsed from har.files: " + fileNames.toString() );
+        for (String filename : fileNames) {
+            if ( filename.length() == 0 ) {
+                writeLogFile("[ERROR] could not open file: " + filename);
+                continue;
+            }
             try {
-                HarEntry reqRespEntry = items.next();
-                String url = reqRespEntry.getRequest().getUrl();
-
-                byte[] requestBytes = helpers.stringToBytes(makeRequest(reqRespEntry.getRequest(), doTrick) );
-
-                // TODO - RESPONSE FORMATING
-                byte[] responseBytes = helpers.stringToBytes( makeResponse(reqRespEntry.getResponse()) );
-
-                RAYRequestResponse x = new RAYRequestResponse(url, requestBytes, responseBytes);
-                requests.add(x);
-
-            } catch (Exception e) {
-                writeLogFile("[ERROR] to transform String to bytes." );
-                writeLogFile("[ERROR] exception: " + e.toString() );
-                return new ArrayList<IHttpRequestResponse>();
+                Har har = harReader.readFromFile(new File(filename), HarReaderMode.LAX);
+                items = har.getLog().getEntries().iterator();
+            } catch (HarReaderException e) {
+                writeLogFile("[ERROR] to read HAR from from file: " + filename);
+                String stackTrace = e.getStackTrace().toString();
+                writeLogFile("[ERROR] exception: " + e.toString() + " stackTrace: " + stackTrace);
+                new ArrayList<IHttpRequestResponse>();
+            }
+            while (items.hasNext()) {
+                try {
+                    HarEntry reqRespEntry = items.next();
+                    String url = reqRespEntry.getRequest().getUrl();
+    
+                    byte[] requestBytes = helpers.stringToBytes(makeRequest(reqRespEntry.getRequest(), doTrick) );
+    
+                    // TODO - RESPONSE FORMATING
+                    byte[] responseBytes = helpers.stringToBytes( makeResponse(reqRespEntry.getResponse()) );
+    
+                    RAYRequestResponse x = new RAYRequestResponse(url, requestBytes, responseBytes);
+                    requests.add(x);
+    
+                } catch (Exception e) {
+                    writeLogFile("[ERROR] to transform String to bytes." );
+                    writeLogFile("[ERROR] exception: " + e.toString() );
+                    continue;
+                }
             }
         }
-
         writeLogFile("[INFO] requests are readed from the HAR.file: " + requests.toString() );
+        System.out.println("[OK] Requests parsed.");
         return requests;
     }
 
@@ -185,10 +189,10 @@ public class RAYImport {
         while (items.hasNext()) {
             HarHeader header = items.next();
             getHost(header);
-            System.out.println(header.toString() );
-            System.out.println(header.getName() );
-            System.out.println(header.getValue() );
             headersString.append(header.getName()).append(": ").append(header.getValue()).append(delimeter);
+            writeLogFile("[INFO] Header: " + header.toString());
+            writeLogFile("[INFO] Header: " + header.getName());
+            writeLogFile("[INFO] Header: " + header.getValue());
         }
 
         return headersString.toString();
@@ -206,48 +210,9 @@ public class RAYImport {
         return pathUrl;
     }
 
-
-
-    public static ArrayList<IHttpRequestResponse> importWStalker() {
-        ArrayList<String> lines = new ArrayList<String>();
-        ArrayList<IHttpRequestResponse> requests = new ArrayList<IHttpRequestResponse>();
-        IExtensionHelpers helpers = HarClientPanel.callbacks.getHelpers();
-        
-        String filename = getLoadFile();
-        if ( filename.length() == 0 ) { // exit if no file selected
-            return new ArrayList<IHttpRequestResponse>();
-        }
-
-        lines = readFile(filename);
-        Iterator<String> i = lines.iterator();
-        
-        while (i.hasNext()) {
-            try {
-                String line = i.next();
-                String[] v = line.split(","); // Format: "base64(request),base64(response),METHOD,url"
-
-                byte[] request = helpers.base64Decode(v[0]);
-                byte[] response = helpers.base64Decode(v[1]);
-                String url = v[3];
-
-                RAYRequestResponse x = new RAYRequestResponse(url, request, response);
-                requests.add(x);
-
-            } catch (Exception e) {
-                return new ArrayList<IHttpRequestResponse>();
-            }
-        }
-
-        return requests;
-    }
-
-    public static boolean loadImported(ArrayList<IHttpRequestResponse> requests) {
-        
-        return true;
-    }
-
-    // for debug purpose
+    // for debug purpose - you should recompile jar
     static void writeLogFile(String text) {
+        boolean isDebug = false;
         if (isDebug) {
             String logFile = "/tmp/aa_har_logs/har_plugin.log";
             boolean append = true;
