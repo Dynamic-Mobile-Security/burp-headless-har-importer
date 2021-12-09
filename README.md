@@ -4,6 +4,7 @@ HAR-plugin-for-Burp-CLI
 для работы в headless режиме нужны оба джарника рядом:  
   burpsuite_pro_v2021.9.1.jar
   headless-burp-scanner-master-SNAPSHOT-jar-with-dependencies.jar.
+  
 скачал архив отсюда, там внутри нужный джарник 
 https://portswigger.net/bappstore/bapps/download/d54b11f7af3c4dfeb6b81fb5db72e381
   
