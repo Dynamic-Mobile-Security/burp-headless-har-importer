@@ -22,7 +22,7 @@ public class HarClientPanel implements IBurpExtender {
     private static final long serialVersionUID = 7415151000560298154L;
 
     private final boolean checkFakeParam = true;
-    private final String paramname = "stingrayParamToExclude";
+    private final String paramname = "mdastParamToExclude";
 
 	private PrintWriter stdout;
 		
@@ -35,52 +35,6 @@ public class HarClientPanel implements IBurpExtender {
         
         stdout = new PrintWriter(HarClientPanel.callbacks.getStdout(), true);
         stdout.println("Loaded [" + HarClientPanel.name + "] Extension");
-        stdout.println("");
-        stdout.println("░░                                                                      ");
-        stdout.println("  ▒▒░░                                                                  ");
-        stdout.println("      ▓▓                                                                ");
-        stdout.println("        ▒▒▒▒                                            ░░░░            ");
-        stdout.println("          ░░▓▓░░                                    ▒▒██                ");
-        stdout.println("              ▓▓▓▓░░                              ██▓▓                  ");
-        stdout.println("                ░░████░░                      ▒▒██▓▓▒▒                  ");
-        stdout.println("                    ▒▒▓▓▓▓░░░░░░            ░░████▓▓                    ");
-        stdout.println("                      ░░▓▓▓▓▓▓▓▓▒▒░░  ░░░░▒▒▓▓▓▓▓▓▒▒                    ");
-        stdout.println("                ▒▒░░░░  ░░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒▓▓▓▓▒▒                  ");
-        stdout.println("                    ▒▒██▓▓░░▒▒▓▓██▓▓▒▒████████▓▓▓▓▓▓▒▒▓▓░░              ");
-        stdout.println("                      ░░▓▓▒▒▒▒▒▒▓▓▒▒▒▒▒▒██████████▓▓▓▓▒▒▒▒▒▒            ");
-        stdout.println("                          ▓▓▓▓▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓██████▓▓▒▒▒▒▒▒▒▒          ");
-        stdout.println("                            ▓▓▓▓▒▒░░░░▒▒▒▒▒▒▒▒▓▓██████▓▓▓▓▒▒▒▒▒▒        ");
-        stdout.println("                            ░░▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▓▓████████▓▓▓▓▒▒▒▒░░      ");
-        stdout.println("                              ▒▒▓▓▓▓▓▓▓▓▒▒▒▒░░▒▒▒▒▓▓██████▓▓▓▓▒▒▓▓      ");
-        stdout.println("                                ▒▒▓▓▓▓▓▓▒▒▓▓▒▒▒▒▒▒▒▒▓▓████████▓▓▒▒░░    ");
-        stdout.println("                                ████▓▓▒▒████▓▓▒▒░░▒▒▒▒▒▒▓▓████▓▓▓▓▓▓    ");
-        stdout.println("                              ▒▒▓▓    ▒▒▓▓██▓▓▓▓▓▓▒▒▒▒▒▒▓▓▓▓████▓▓▓▓▒▒  ");
-        stdout.println("                              ▓▓        ▒▒██▓▓▒▒▒▒▓▓▓▓▓▓▒▒▓▓▓▓████▓▓▓▓  ");
-        stdout.println("                                          ██▓▓▒▒▓▓░░░░▒▒▓▓▒▒▓▓▓▓████▓▓▒▒");
-        stdout.println("                                          ▓▓▓▓    ▓▓▒▒░░▒▒▒▒▒▒▓▓████▓▓▓▓");
-        stdout.println("                                            ▓▓      ░░▓▓░░▒▒▒▒▒▒▓▓████▓▓");
-        stdout.println("                                            ▓▓          ▓▓▒▒▒▒▓▓▒▒████▓▓");
-        stdout.println("                                              ▒▒          ▒▒░░▓▓▒▒████▓▓");
-        stdout.println("                                                            ▓▓▒▒▓▓▓▓██▓▓");
-        stdout.println("                                                            ▒▒▒▒▓▓▓▓██▓▓");
-        stdout.println("                                                            ░░░░▓▓▓▓██▒▒");
-        stdout.println("                                              ░░            ░░▒▒▓▓▓▓▓▓  ");
-        stdout.println("                                              ▒▒            ▒▒▒▒▓▓██▓▓  ");
-        stdout.println("                                              ▒▒            ▓▓▒▒▓▓▓▓    ");
-        stdout.println("                                            ▒▒▒▒        ░░▓▓██▓▓██      ");
-        stdout.println("                                            ▓▓▓▓    ▓▓▓▓▓▓▓▓▒▒██        ");
-        stdout.println("                                            ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓            ");
-        stdout.println("                                          ▓▓▓▓▒▒  ▓▓  ▓▓▓▓              ");
-        stdout.println("                                          ▓▓▓▓        ▓▓                ");
-        stdout.println("                                          ▓▓        ▒▒▒▒                ");
-        stdout.println("                                        ▓▓▒▒                            ");
-        stdout.println("                                      ░░▓▓                              ");
-        stdout.println("                                                                        ");
-        stdout.println("                                                                        ");
-        stdout.println("                                                                        ");
-        stdout.println("                                                                        ");
-        stdout.println("                                                                        ");
-        stdout.println("      ░░░░  ░░░░░░░░  ░░5w02df15h░░░░53cu217y░░░░░░░░  ░░░░  ░░░░       ");
         
         // set our extension name
         callbacks.setExtensionName(HarClientPanel.name);
